@@ -1,0 +1,24 @@
+{
+  "name": "koa-spike",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p .",
+    "start": "node lib/app.js"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.11.2",
+    "@types/koa__router": "^8.0.2",
+    "@types/uuid": "^7.0.0",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@koa/router": "^8.0.8",
+    "@types/koa-bodyparser": "^4.3.0",
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1",
+    "prom-client": "^12.0.0",
+    "uuid": "^7.0.2"
+  }
+}
