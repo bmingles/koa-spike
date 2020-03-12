@@ -1,0 +1,8 @@
+POST http://localhost:3000/metric HTTP/1.1
+Content-Type: application/json
+
+{
+  "tag": "testing",
+  # "createdAt": "2020-03-01T00:00:00Z",
+  "data": {}
+}

@@ -1,43 +1,39 @@
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import Router from '@koa/router'
-import client from 'prom-client'
-import { v4 as uuidv4 } from 'uuid'
+import { oas } from 'koa-oas3'
+import { join } from 'path'
+import { MetricService } from './metric'
 
-interface Context extends Koa.DefaultContext {
-  metrics: client.metric[]
+interface State extends Koa.DefaultState {
+  metricService: MetricService
 }
 
-const guage = new client.Gauge({
-  name: 'someTag',
-  help: 'someTag_help',
-  labelNames: ['id', 'label', 'createdAt'],
-})
-
-const app = new Koa<Koa.DefaultState, Context>()
-const router = new Router()
+const app = new Koa()
+const router = new Router<State>()
 
 router.get('/', ctx => {
-  ctx.body = client.register.getMetricsAsJSON()
+  ctx.body = {}
 })
 
 router.post('/metric', ctx => {
   const metric = ctx.request.body
-
-  const id = uuidv4()
-  const createdAt = new Date().toISOString()
-
-  guage.set({ id, label: 'duration', createdAt }, metric.duration)
-  guage.set({ id, label: 'interval:one_two', createdAt }, metric.intervals[0])
-  guage.set({ id, label: 'interval:two_three', createdAt }, metric.intervals[1])
-  guage.set(
-    { id, label: 'interval:three_four', createdAt },
-    metric.intervals[2],
-  )
-  ctx.body = id
+  ctx.state.metricService.log(metric)
+  ctx.body = true
 })
 
+app.use(async (ctx, next) => {
+  ctx.state.metricService = new MetricService()
+  await next()
+})
 app.use(bodyParser())
+app.use(
+  oas({
+    file: join(__dirname, '..', 'api.yaml'),
+    endpoint: '/openapi.json',
+    uiEndpoint: '/openapi',
+  }),
+)
 app.use(router.routes())
 app.listen(3000, () => {
   console.log('listening on 3000')

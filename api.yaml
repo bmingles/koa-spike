@@ -1,0 +1,36 @@
+openapi: 3.0.0
+info:
+  title: Metrics API
+  version: 1.0.0
+
+paths:
+  /metric:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/MetricBody'
+      responses:
+        '201':
+          description: Success
+
+components:
+  requestBodies:
+    MetricBody:
+      description: A JSON metric
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - tag
+            properties:
+              tag:
+                type: string
+              createdAt:
+                type: string
+                format: date-time
+              data:
+                type: object
