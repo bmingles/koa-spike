@@ -16,7 +16,7 @@
   "dependencies": {
     "@koa/router": "^8.0.8",
     "@types/koa-bodyparser": "^4.3.0",
-    "aws-sdk": "^2.638.0",
+    "aws-sdk": "^2.814.0",
     "koa": "^2.11.0",
     "koa-bodyparser": "^4.2.1",
     "koa-oas3": "^0.18.0",
